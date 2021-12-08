@@ -20,6 +20,8 @@ from typedjson import UnsupportedDecoding
 from dataclasses import dataclass
 from dataclasses import field
 
+from datetime import date, datetime
+
 A = NewType("A", str)
 
 
@@ -120,6 +122,26 @@ def test_can_decode_false() -> None:
 def test_can_decode_optional() -> None:
     json = None
     assert typedjson.decode(Optional[str], json) == json
+
+
+def test_can_decode_date() -> None:
+    json = date(2021, 10, 1)
+    assert typedjson.decode(date, json) == json
+
+
+def test_can_decode_datetime() -> None:
+    json = datetime(2021, 10, 1, 1, 1, 1)
+    assert typedjson.decode(datetime, json) == json
+
+
+def test_raises_if_datetime_given_instead_of_date() -> None:
+    json = datetime(2021, 10, 1, 1, 1, 1)
+    assert typedjson.decode(date, json) == DecodingError(TypeMismatch(()))
+
+
+def test_raises_if_date_given_instead_of_datetime() -> None:
+    json = date(2021, 10, 1)
+    assert typedjson.decode(datetime, json) == DecodingError(TypeMismatch(()))
 
 
 def test_can_decode_homogeneous_fixed_tuple() -> None:

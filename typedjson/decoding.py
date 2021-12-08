@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from datetime import datetime, date
+
 from typing import Any
 from typing import Iterable
 from typing import Iterator
@@ -141,8 +143,10 @@ def decode_as_primitive(
             if type(json) in (float, int)
             else DecodingError(TypeMismatch(path))
         )
-    if type_ in (str, int, bool, type(None)):
-        return json if isinstance(json, type_) else DecodingError(TypeMismatch(path))
+
+    primitives = (str, int, bool, type(None), date, datetime)
+    if type_ in primitives:
+        return json if type(json) is type_ else DecodingError(TypeMismatch(path))
     elif supertype is not None:
         return (
             type_(json)  # type: ignore
