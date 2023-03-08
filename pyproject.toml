@@ -17,7 +17,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-typing-extensions = "^3.7"
+typing-extensions = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.3"
